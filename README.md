@@ -20,3 +20,4 @@ You'll need to add the `verifyWSO2JWT` lambda function as a custom authorizer fo
     + **You should see a form that looks like this**:
     ![image](https://cloud.githubusercontent.com/assets/281637/13755808/8ed15406-e9e2-11e5-9a06-733126664468.png)
 5. Fill out all the required fields. (Denoted by an *).
+6. 
