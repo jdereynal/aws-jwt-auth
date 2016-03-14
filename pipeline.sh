@@ -20,7 +20,7 @@ EOF
 
     case "$1" in
         start)
-            say "Starting $REPO_NAME deployment." && \
+            say "Starting" " $REPO_NAME " "deployment." && \
             LAST_WORKING_PRODUCTION_LAMBDA_VERSION=$(aws lambda get-alias \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
