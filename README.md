@@ -7,6 +7,7 @@ An AWS API Gateway custom authorizer to validate JWTs created by BYU's WSO2.
 - If you are not in the NotifyMe AWS domain
     + First you'll need to [create a lambda function](#create-a-lambda-function) called `verifyWSO2JWT`.
     + Then [add a custom authorizer](#add-a-custom-authorizer) for your api.
+
 ### Create A Lambda Function
 
 ### Add A Custom Authorizer
