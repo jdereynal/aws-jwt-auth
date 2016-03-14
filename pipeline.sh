@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PIPELINE=WSO2 JWT Custom Authorizer
+PIPELINE="WSO2 JWT Custom Authorizer"
 BUCKET=verify-wso2-jwt-lambda-versions
 LAMBDA_FUNCTION_REGION=us-west-2
 LAMBDA_FUNCTION=verifyWSO2JWT
@@ -12,7 +12,7 @@ pipeline() {
         # heredoc indentation has to be done with tabs, since this file is indented using
         # spaces, the heredoc is not indented at the correct level at the moment.
         cat << EOF > /tmp/aws-deployment.env
-REPO_NAME="$PIPELINE"
+REPO_NAME=$PIPELINE
 SLACK_INCOMING_WEBHOOK_URL=$SLACK_INCOMING_WEBHOOK_URL
 CI_COMMIT_MESSAGE=$(git show -s --format=%s $CIRCLE_SHA1)
 CI_COMMIT_ID=$CIRCLE_SHA1
