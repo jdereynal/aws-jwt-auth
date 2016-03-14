@@ -20,7 +20,7 @@ EOF
 
     case "$1" in
         start)
-            say "Starting $REPO_NAME deployment." && \
+            say '"Starting $REPO_NAME deployment."' && \
             LAST_WORKING_PRODUCTION_LAMBDA_VERSION=$(aws lambda get-alias \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
@@ -36,7 +36,7 @@ EOF
             # Put new version of lambda out.
             cp $LAMBDA_FUNCTION.js index.js && \
             zip -r $CIRCLE_SHA1 index.js && \
-            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \    
+            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             VERSION_TO_RELEASE_IF_SUCCESSFUL=$(aws lambda update-function-code \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
@@ -77,7 +77,7 @@ EOF
             return 0
             ;;
         finish)
-            say "$REPO_NAME deployment finished succesfully."
+            say '"$REPO_NAME deployment finished succesfully."'
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting finish pipeline succesfully."
                 return 1
@@ -96,7 +96,7 @@ EOF
 }
 
 say() {
-    docker run --env-file /tmp/aws-deployment.env -v /tmp:/tmp quay.io/byuoit/aws-deployment slack_say "\"$@\""
+    docker run --env-file /tmp/aws-deployment.env -v /tmp:/tmp quay.io/byuoit/aws-deployment slack_say "$@"
 }
 
 run-tests() {
