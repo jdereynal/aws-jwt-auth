@@ -3,11 +3,11 @@ An AWS API Gateway custom authorizer to validate JWTs created by BYU's WSO2.
 
 ## Usage
 - If you are in the NotifyMe AWS domain (https://notify-me-byu.signin.aws.amazon.com)
-    + [Follow these instructions](#instructions-1)
+    + [Follow these instructions](#notifyme-aws-domain)
 - If you are not in the NotifyMe AWS domain
-    +  [Follow these instructions](#instructions-2)
+    +  [Follow these instructions](#not-in-aws-domain)
 
-### Instructions 1
+### NotifyMe AWS Domain
 
-### Instructions 2
+### Not in AWS Domain
 
