@@ -14,7 +14,7 @@ You'll need to add the `verifyWSO2JWT` lambda function as a custom authorizer fo
 2. Click on the API for which you would like to add the custom authorizer.
 3. Click on the "Resources" tab to the right of your API name.
 4. Select "Custom Authorizers" in the list that appears.
-    + **You should then see a form that looks like this:**
+    + **You should see a form that looks like this**:
     ![image](https://cloud.githubusercontent.com/assets/281637/13755808/8ed15406-e9e2-11e5-9a06-733126664468.png)
 
 ### Other AWS Domain
