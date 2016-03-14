@@ -9,5 +9,5 @@ An AWS API Gateway custom authorizer to validate JWTs created by BYU's WSO2.
 
 ### NotifyMe AWS Domain
 
-### Not in AWS Domain
+### Other AWS Domain
 
