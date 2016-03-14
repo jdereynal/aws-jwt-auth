@@ -12,7 +12,7 @@ pipeline() {
         # heredoc indentation has to be done with tabs, since this file is indented using
         # spaces, the heredoc is not indented at the correct level at the moment.
         cat << EOF > /tmp/aws-deployment.env
-REPO_NAME=$PIPELINE
+REPO_NAME="$PIPELINE"
 SLACK_INCOMING_WEBHOOK_URL=$SLACK_INCOMING_WEBHOOK_URL
 CI_COMMIT_MESSAGE=$(git show -s --format=%s $CIRCLE_SHA1)
 CI_COMMIT_ID=$CIRCLE_SHA1
