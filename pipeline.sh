@@ -96,7 +96,7 @@ EOF
 }
 
 say() {
-    docker run --env-file /tmp/aws-deployment.env -v /tmp:/tmp quay.io/byuoit/aws-deployment slack_say "$@"
+    docker run --env-file /tmp/aws-deployment.env -v /tmp:/tmp quay.io/byuoit/aws-deployment slack_say "\"$@\""
 }
 
 run-tests() {
