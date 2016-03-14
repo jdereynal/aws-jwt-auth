@@ -20,7 +20,7 @@ EOF
 
     case "$1" in
         start)
-            say '"Starting $REPO_NAME deployment."' && \
+            say "$REPO_NAME" && \
             LAST_WORKING_PRODUCTION_LAMBDA_VERSION=$(aws lambda get-alias \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
@@ -77,7 +77,7 @@ EOF
             return 0
             ;;
         finish)
-            say '"$REPO_NAME deployment finished succesfully."'
+            say "$REPO_NAME"
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting finish pipeline succesfully."
                 return 1
