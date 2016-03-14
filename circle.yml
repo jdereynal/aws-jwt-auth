@@ -1,0 +1,27 @@
+machine:
+  python:
+    version: 2.7.3
+  services:
+    - docker
+    
+checkout:
+  post:
+    - ./pipeline.sh start || ./pipeline.sh fail
+
+dependencies:
+  pre:
+    - pip install awscli
+    - ./pipeline.sh deploy || ./pipeline.sh fail
+
+test:
+  override:
+    - ./pipeline.sh run-tests dev || ./pipeline.sh fail
+
+deployment:
+  awslambda:
+    branch: master
+    commands:
+      - ./pipeline.sh release || ./pipeline.sh fail
+      - ./pipeline.sh run-tests prod || (./pipeline.sh rollback && ./pipeline.sh fail)
+      - ./pipeline.sh finish || ./pipeline.sh fail
+
