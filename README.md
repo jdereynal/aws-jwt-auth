@@ -45,5 +45,5 @@ You'll need to add the `verifyWSO2JWT` lambda function as a custom authorizer fo
 12. Under "Authorization Settings", click on the pencil icon to the right of "Authoriztion."
 13. Select your custom authorizer in the dropdown menu.
 14. Click the checkmark icon to the right of the dropdown menu.
-15. Deploy your API for the custom authorizer to take effect.
-16. Repeat steps 10 - 15 for each HTTP method that you would like to use your custom authorizer.
+15. Repeat steps 10 - 14 for each HTTP method that you would like to use your custom authorizer.
+16. Deploy your API for the custom authorizer to take effect.
