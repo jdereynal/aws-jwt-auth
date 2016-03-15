@@ -39,6 +39,8 @@ EOF
             cd - && \
             rm -rf lambda-deployment-package/ && \
             mv $CIRCLE_SHA1.zip lambda.zip && \
+            git config user.email "ako+circleci@byu.edu" && \
+            git config user.name "CircleCI" && \
             git add lambda.zip && \
             git commit -am "release $CIRCLE_SHA1 of lambda. [ci skip]" && \
             git push #&& \
