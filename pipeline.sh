@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PIPELINE="WSO2 JWT Custom Authorizer"
+PIPELINE="AWS JWT Custom Authorizer"
 BUCKET=verify-jwt-lambda-versions
 LAMBDA_FUNCTION_REGION=us-west-2
 LAMBDA_FUNCTION=verifyJWT
