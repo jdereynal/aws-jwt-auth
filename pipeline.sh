@@ -36,7 +36,12 @@ EOF
             cd lambda-deployment-package/ && \
             npm install && \
             zip -r ../$CIRCLE_SHA1 . && \
-            cd - #&& \
+            cd - && \
+            rm -rf lambda-deployment-package/ && \
+            mv $CIRCLE_SHA1.zip lambda.zip && \
+            git add lambda.zip && \
+            git commit -am "release $CIRCLE_SHA1 of lambda. [ci skip]" && \
+            git push #&& \
             # aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             # aws lambda update-function-code \
             #    --region $LAMBDA_FUNCTION_REGION \
