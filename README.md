@@ -1,13 +1,11 @@
 # AWS JWT Authorizer
-A AWS Lambda function intended to be used as an AWS API Gateway custom authorizer to validate JWTs created by BYU's WSO2.
-
-With slight modifications, this can be used as an AWS API Gateway custom authorizer to validate any JWT passed to your AWS API Gateway.
+A AWS Lambda function intended to be used as an AWS API Gateway custom authorizer to verify JWTs.
 
 ## Usage
 - If you are in the NotifyMe AWS domain (https://notify-me-byu.signin.aws.amazon.com)
     + You just need to [add a custom authorizer](#add-a-custom-authorizer) for your api.
 - If you are not in the NotifyMe AWS domain
-    + First you'll need to [create a lambda function](#create-a-lambda-function) called `verifyWSO2JWT`.
+    + First you'll need to [create a lambda function](#create-a-lambda-function) called `verifyJWT`.
     + Then [add a custom authorizer](#add-a-custom-authorizer) for your api.
 
 ### Create A Lambda Function
@@ -16,11 +14,10 @@ With slight modifications, this can be used as an AWS API Gateway custom authori
 2. If you don't have any existing lambda functions, you'll see the AWS Lambda welcome page. Click on "Get Started Now." If you do have existing lambda functions, you'll see the normal lambda landing page with the list of your lambda functions. Click on "Create a Lambda function" in the top left-hand corner of this page.
 3. You'll be asked to select a blueprint (a template really) for your lambda function, just click "Skip" in the bottom right-hand corner of this page.
 4. Give your function a name, description, and select "Node.js" as the runtime.
-    + If you want to be able to follow [the instructions for adding a custom authorizer](#add-a-custom-authorizer) directly, name your function `verifyWSO2JWT`. Otherwise, simply replace `verifyWSO2JWT` in those instructions with your actual function name.
-5. If you want your custom authorizer to verify JWTs from BYU's WSO2 then select "Upload a .ZIP from Amazon S3" for "Code entry type" under the "Lambda function code" section.
+    + If you want to be able to follow [the instructions for adding a custom authorizer](#add-a-custom-authorizer) directly, name your function `verifyJWT`. Otherwise, simply replace `verifyJWT` in those instructions with your actual function name.
 
 ### Add A Custom Authorizer
-You'll need to add the `verifyWSO2JWT` lambda function as a custom authorizer for your api.
+You'll need to add the `verifyJWT` lambda function as a custom authorizer for your api.
 
 1. From the Amazon AWS Console home, click on "API Gateway."
 2. Click on the API for which you would like to add the custom authorizer.
@@ -31,9 +28,9 @@ You'll need to add the `verifyWSO2JWT` lambda function as a custom authorizer fo
 5. Fill out the information for the custom authorizer.
     + **Name**: A name for your custom authorizer. Can be anything you'd like but cannot include spaces.
     + **Lambda region**: The region in which you created your lambda function. If you are in the NotifyMe AWS domain, the region is `us-west-2` .
-    + **Lambda function**: The name of the your lambda function. If you followed [the instructions for creating a lambda function](#create-a-lambda-function) or you are in the NotifyMe AWS domain, the function name is `verifyWSO2JWT` .
+    + **Lambda function**: The name of the your lambda function. If you followed [the instructions for creating a lambda function](#create-a-lambda-function) or you are in the NotifyMe AWS domain, the function name is `verifyJWT` .
     + **Execution Role**: You can optionally specify a role which API Gateway will use to invoke your custom authorizer. It's fine to leave this blank.
-    + **Identity token source**: The location of the token in the client request. BYU WSO2 sticks this in the `X-JWT-Assertion` header, so the identity token source would be: `method.request.header.X-JWT-Assertion`.
+    + **Identity token source**: The location of the token in the client request. In my environment, this in the `X-JWT-Assertion` header, so in my case the identity token source would be: `method.request.header.X-JWT-Assertion`.
     + **Token validation expression**: An optional regular expression you can specify that API Gateway will use to validate the incoming JWT before it is passed to your custom authorizer. Specify one if you want, but leaving it blank is totally fine.
     + **Result TTL in seconds**: How long API Gateway should cache the response from your custom authorizer for a particular JWT. Defaults to 300 seconds. You can change this value to something that makes more sense for your API or just leave it as is.
 6. Once you are done entering the information, click "Create" in the bottom right-hand corner of the console. If any errors occur, adjust your custom authorizer information accordingly and click "Create" again.
