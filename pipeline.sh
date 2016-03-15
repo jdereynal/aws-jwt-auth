@@ -23,7 +23,7 @@ EOF
         start)
             say "$PIPELINE deployment started."
             if [ "$?" -ne 0 ]; then
-                __write_failure_msg "Error while attempting to initialize pipeline. Previous DEV and PROD lambda aliases will remain in place."
+                __write_failure_msg "Error while attempting to initialize pipeline. Previous lambda function code will remain in place."
                 return 1
             fi
             ;;
@@ -44,7 +44,7 @@ EOF
                 --s3-bucket $BUCKET \
                 --s3-key $CIRCLE_SHA1.zip
             if [ "$?" -ne 0 ]; then
-                __write_failure_msg "Error while attempting to deploy new version to DEV lambda alias. Previous DEV alias will remain in place."
+                __write_failure_msg "Error while attempting to update lambda function code. Previous lambda function code will remain in place."
                 return 1
             fi
             ;;
@@ -55,7 +55,7 @@ EOF
         finish)
             say "$PIPELINE deployment finished succesfully."
             if [ "$?" -ne 0 ]; then
-                __write_failure_msg "Error while attempting finish pipeline succesfully."
+                __write_failure_msg "Error while attempting finish pipeline succesfully, but new lambda function code is in place."
                 return 1
             fi
             return 0
