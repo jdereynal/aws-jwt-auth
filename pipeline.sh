@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 PIPELINE="WSO2 JWT Custom Authorizer"
-BUCKET=verify-wso2-jwt-lambda-versions
+BUCKET=verify-jwt-lambda-versions
 LAMBDA_FUNCTION_REGION=us-west-2
-LAMBDA_FUNCTION=verifyWSO2JWT
+LAMBDA_FUNCTION=verifyJWT
 
 pipeline() {
     # If our deployment environment file doesnt exist already, create it.
@@ -21,13 +21,7 @@ EOF
 
     case "$1" in
         start)
-            say "$PIPELINE deployment started." && \
-            LAST_WORKING_PRODUCTION_LAMBDA_VERSION=$(aws lambda get-alias \
-                --region $LAMBDA_FUNCTION_REGION \
-                --function-name $LAMBDA_FUNCTION \
-                --name PROD \
-                --query FunctionVersion) && \
-                echo -n "$LAST_WORKING_PRODUCTION_LAMBDA_VERSION" > /tmp/last-working-production-lambda-version
+            say "$PIPELINE deployment started."
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to initialize pipeline. Previous DEV and PROD lambda aliases will remain in place."
                 return 1
@@ -35,17 +29,20 @@ EOF
             ;;
         deploy)
             # Put new version of lambda out.
-            cp $LAMBDA_FUNCTION.js index.js && \
-            zip -r $CIRCLE_SHA1 index.js && \
+            mkdir lambda-deployment-package && \
+            cp package.json lambda-deployment-package/ && \
+            cp index.js lambda-deployment-package/ && \
+            cd lambda-deployment-package/ && \
+            npm install && \
+            cd - && \
+            zip -rj $CIRCLE_SHA1 lambda-deployment-package/ && \
             aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
-            VERSION_TO_RELEASE_IF_SUCCESSFUL=$(aws lambda update-function-code \
+            aws lambda update-function-code \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
                 --publish \
                 --s3-bucket $BUCKET \
-                --s3-key $CIRCLE_SHA1.zip \
-                --query Version) && \
-                echo -n "$VERSION_TO_RELEASE_IF_SUCCESSFUL" > /tmp/new-lambda-version
+                --s3-key $CIRCLE_SHA1.zip
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to deploy new version to DEV lambda alias. Previous DEV alias will remain in place."
                 return 1
@@ -54,28 +51,6 @@ EOF
         run-tests)
             shift
             run-tests "$@"
-            ;;
-        release)
-            # Update prod lambda alias to new version.
-            aws lambda update-alias \
-                --region $LAMBDA_FUNCTION_REGION \
-                --function-name $LAMBDA_FUNCTION \
-                --name PROD \
-                --function-version $(cat /tmp/new-lambda-version | tr -d '"')
-            if [ "$?" -ne 0 ]; then
-                __write_failure_msg "Error while attempting to update lambda PROD alias. Previous PROD alias will remain in place."
-                return 1
-            fi
-            ;;
-        rollback)
-            # Update prod lambda alias to last working version.
-            aws lambda update-alias \
-                --region $LAMBDA_FUNCTION_REGION \
-                --function-name $LAMBDA_FUNCTION \
-                --name PROD \
-                --function-version $(cat /tmp/last-working-production-lambda-version | tr -d '"')
-            __write_failure_msg "NotifyMe pipeline production tests failed. Rolled back PROD lambda alias to last working version."
-            return 0
             ;;
         finish)
             say "$PIPELINE deployment finished succesfully."

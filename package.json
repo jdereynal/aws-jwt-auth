@@ -1,0 +1,20 @@
+{
+  "name": "aws-jwt-auth",
+  "version": "1.0.0",
+  "description": "AWS JWT Authorizer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/byu-oit-appdev/aws-jwt-auth.git"
+  },
+  "keywords": [
+    "aws",
+    "jwt",
+    "auth"
+  ],
+  "author": "Alex Olson <ako@byu.edu> (https://github.com/alexkolson)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/byu-oit-appdev/aws-jwt-auth/issues"
+  },
+  "homepage": "https://github.com/byu-oit-appdev/aws-jwt-auth#readme"
+}
