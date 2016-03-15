@@ -35,8 +35,8 @@ EOF
             cp README.md lambda-deployment-package/ && \
             cd lambda-deployment-package/ && \
             npm install && \
-            rm lambda-deployment-package/README.md && \
-            rm lambda-deployment-package/package.json && \
+            rm README.md && \
+            rm package.json && \
             zip -r ../$CIRCLE_SHA1 . && \
             cd - && \
             rm -rf lambda-deployment-package/ && \
