@@ -35,9 +35,9 @@ EOF
             cp README.md lambda-deployment-package/ && \
             cd lambda-deployment-package/ && \
             npm install && \
+            zip -r ../$CIRCLE_SHA1 . && \
             cd - && \
-            zip -rj $CIRCLE_SHA1 lambda-deployment-package/ && \
-            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
+            # aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             aws lambda update-function-code \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
