@@ -1,10 +1,10 @@
 # AWS JWT Authorizer
-A AWS Lambda function intended to be used as an AWS API Gateway custom authorizer to verify JWTs.
+An AWS Lambda function intended to be used as an AWS API Gateway custom authorizer to verify JWTs.
 
 ## Usage
-- If you are at BYU and you are in the NotifyMe AWS domain (https://notify-me-byu.signin.aws.amazon.com):
+- If you are a developer at BYU and you are in the NotifyMe AWS domain (https://notify-me-byu.signin.aws.amazon.com):
     + You just need to [add a custom authorizer](#add-a-custom-authorizer) for your api.
-- If you are not at BYU and not in the NotifyMe AWS domain:
+- If you are not a developer at BYU or you not in the NotifyMe AWS domain:
     + First you'll need to [create a lambda function](#create-a-lambda-function) called `verifyJWT`.
     + Then [add a custom authorizer](#add-a-custom-authorizer) for your api.
 
