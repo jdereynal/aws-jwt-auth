@@ -32,6 +32,7 @@ EOF
             mkdir lambda-deployment-package && \
             cp package.json lambda-deployment-package/ && \
             cp index.js lambda-deployment-package/ && \
+            cp README.md lambda-deployment-package/ && \
             cd lambda-deployment-package/ && \
             npm install && \
             cd - && \

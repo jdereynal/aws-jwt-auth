@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/byu-oit-appdev/aws-jwt-auth/issues"
   },
-  "homepage": "https://github.com/byu-oit-appdev/aws-jwt-auth#readme"
+  "homepage": "https://github.com/byu-oit-appdev/aws-jwt-auth#readme",
+  "dependencies": {
+    "byu-jwt": "0.0.8"
+  }
 }
