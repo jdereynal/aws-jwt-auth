@@ -12,10 +12,17 @@ With slight modifications, this can be used as an AWS API Gateway custom authori
 
 ### Create A Lambda Function
 
+1. From the Amazon AWS Console home, click on "Lambda."
+2. If you don't have any existing lambda functions, you'll see the AWS Lambda welcome page. Click on "Get Started Now." If you do have existing lambda functions, you'll see the normal lambda landing page with the list of your lambda functions. Click on "Create a Lambda function" in the top left-hand corner of this page.
+3. You'll be asked to select a blueprint (a template really) for your lambda function, just click "Skip" in the bottom right-hand corner of this page.
+4. Give your function a name, description, and select "Node.js" as the runtime.
+    + If you want to be able to follow [the instructions for adding a custom authorizer](#add-a-custom-authorizer) directly, name your function `verifyWSO2JWT`. Otherwise, simply replace `verifyWSO2JWT` in those instructions with your actual function name.
+5. If you want your custom authorizer to verify JWTs from BYU's WSO2 then select "Upload a .ZIP from Amazon S3" for "Code entry type" under the "Lambda function code" section.
+
 ### Add A Custom Authorizer
 You'll need to add the `verifyWSO2JWT` lambda function as a custom authorizer for your api.
 
-1. From the Aamazon AWS Console home, click on "API Gateway".
+1. From the Amazon AWS Console home, click on "API Gateway."
 2. Click on the API for which you would like to add the custom authorizer.
 3. Click on the "Resources" tab in the grey bar near the top of the console. It should be located immediately to the right of your API name.
 4. Select "Custom Authorizers" in the list that appears.
