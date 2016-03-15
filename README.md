@@ -44,7 +44,7 @@ You will need to add the `verifyJWT` lambda function as a custom authorizer for 
 9. Select "Resources" in the list that appears.
 10. In the Resources menu on the left, select the HTTP method for which you want to use the custom authorizer.
 11. Click on "Method Request."
-12. Under "Authorization Settings", click on the pencil icon to the right of "Authoriztion."
+12. Under "Authorization Settings", click on the pencil icon to the right of "Authorization."
 13. Select your custom authorizer in the dropdown menu.
 14. Click the checkmark icon to the right of the dropdown menu.
 15. Repeat steps 10 - 14 for each HTTP method that you would like to use your custom authorizer.
