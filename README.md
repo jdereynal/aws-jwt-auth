@@ -36,6 +36,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
     + If any errors occur after you click "Next," adjust any neccesary fields and click "Next" again.
 10. You will be asked to review your Lambda function details. Click "Create function" to finish the process and actually create your lambda function.
 11. Awesome! You have now created your lambda function. Now you just need to [add the lambda function as a custom authorizer](#add-a-custom-authorizer) in our API.
+    + **Important**: You may need to modify the lambda function to fit your needs. The prepackaged `lamda.zip` in this repository is built to verify JWT's that are generated and signed by BYU's WSO2 API Gateway. If you are not at BYU and/or your JWT's are generated and signed by anything else, you will need to modify `index.js` to verify your JWTs, then create a lambda deployment package and upload it as described in [Amazon's documentation](http://docs.aws.amazon.com/lambda/latest/dg/nodejs-create-deployment-pkg.html). Even so, you can still continue on in the instructiolns and use the prepackaged `lambda.zip` as your lambda function's source just so you can kick the tires and create a custom authorizer for your API to get a feel for how it works. You will obviously still need to modify it afterward in order for it to actually work in your environment.
 
 ### Add A Custom Authorizer
 You will need to add the `verifyJWT` lambda function as a custom authorizer for your api.
