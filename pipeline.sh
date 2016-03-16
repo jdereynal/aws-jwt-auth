@@ -45,6 +45,7 @@ EOF
             git config user.name "CircleCI Deployment Bot" && \
             git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
             git checkout -b release origin/release && \
+            git pull --rebase && \
             git add byuawsjwtauthorizer.zip && \
             git commit -am "release $CIRCLE_SHA1 version of byu aws jwt authorizer." && \
             git push && \
