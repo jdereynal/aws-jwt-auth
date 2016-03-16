@@ -43,8 +43,11 @@ EOF
             cp $CIRCLE_SHA1.zip latest.zip && \
             cp latest.zip byuawsjwtauthorizer.zip && \
             git config user.name "CircleCI Deployment Bot" && \
-            git config user.email "circleci@byu-oit-appdev/aws-jwt-auth"
+            git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
             git checkout -b release origin/release && \
+            git add byuawsjwtauthorizer.zip && \
+            git commit -am "release $CIRCLE_SHA1 version of byu aws jwt authorizer." && \
+            git push && \
             aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             aws s3 cp latest.zip s3://$BUCKET && \
             aws lambda update-function-code \
