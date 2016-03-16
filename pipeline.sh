@@ -29,6 +29,10 @@ EOF
             ;;
         deploy)
             # Update lambda version.
+            # Sticking the byuawsjwtauthorizer.zip inside of the release-staging folder on lines
+            # 46 & 47, and then extracting it back out on line 53 preserves the local version,
+            # which is the one we want to keep and push out to the release branch in the first place.
+            # Git will complain if you try to checkout a branch that would overwrite your local changes anyway.
             mkdir lambda-deployment-package && \
             cp package.json lambda-deployment-package/ && \
             cp index.js lambda-deployment-package/ && \
@@ -42,12 +46,15 @@ EOF
             rm -rf lambda-deployment-package/ && \
             cp $CIRCLE_SHA1.zip latest.zip && \
             cp latest.zip byuawsjwtauthorizer.zip && \
+            mkdir release-staging && \
+            mv byuawsjwtauthorizer.zip release-staging/ && \
             git config user.name "CircleCI Deployment Bot" && \
             git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
             git checkout -b release origin/release && \
             git pull --rebase && \
+            mv release-staging/byuawsjwtauthorizer.zip . && \
             git add byuawsjwtauthorizer.zip && \
-            git commit -am "release $CIRCLE_SHA1 version of byu aws jwt authorizer." && \
+            git commit -m "release $CIRCLE_SHA1 version of byu aws jwt authorizer." && \
             git push && \
             aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             aws s3 cp latest.zip s3://$BUCKET && \
