@@ -25,6 +25,17 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
     + Click "Upload a .ZIP file"
     + In the red box that appears, click the "Upload" button.
     + Select the "lambda.zip" file located in the root of this repository.
+7. A few more sections should have appeared on the page. Under "Lambda function handler and role":
+    + **Handler**: Should contain `index.handler`. If not, change it to contain `index.handler`.
+    + **Role**: Select or create an execution role. If you are unsure of what execution role you'd like to use, create a new role by selecting "* Basic execution role" from the menu. This will open up a new page to create the role. Give your role a name and click "Allow" in the bottom right-hand corner of the page. You will then be taken back to the lambda creation page with your new role selected in the role menu.
+8. Under "Advanced Settings" you can optionally configure you lambda function with a different memory or timeout setting, as well as specify a VPC in which your lambda should be able to access resources.
+    + **Memory**: 256 (MB) should be totally fine.
+    + **Timeout**: You should not need to set this to higher than 1 or 2 seconds. If you find that you need to, [open an issue](https://github.com/byu-oit-appdev/aws-jwt-auth/issues/new) so that together we can better the function's performance.
+    + **VPC**: Since this lambda function is intended to act as an AWS API Gateway custom authorizer, we don't need to do or access anything inside a VPC, just select "No VPC."
+9. Click "Next" in the bottom right-hand corner.
+    + If any errors occur after you click "Next," adjust any neccesary fields and click "Next" again.
+10. You will be asked to review your Lambda function details. Click "Create function" to finish the process and actually create your lambda function.
+11. Awesome! You have now created your lambda function. Now we just need to [add the lambda function as a custom authorizer](#add-a-custom-authorizer) in our API.
 
 ### Add A Custom Authorizer
 You will need to add the `verifyJWT` lambda function as a custom authorizer for your api.
