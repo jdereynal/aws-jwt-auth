@@ -40,14 +40,14 @@ EOF
             zip -r ../$CIRCLE_SHA1 . && \
             cd - && \
             rm -rf lambda-deployment-package/ && \
-            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             cp $CIRCLE_SHA1.zip latest.zip && \
+            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
+            aws s3 cp latest.zip s3://$BUCKET && \
             aws lambda update-function-code \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
                 --s3-bucket $BUCKET \
-                --s3-key $CIRCLE_SHA1.zip && \
-            aws s3 cp latest.zip s3://$BUCKET
+                --s3-key $CIRCLE_SHA1.zip
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to update lambda function code. Previous lambda function code will remain in place."
                 return 1
