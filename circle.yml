@@ -1,3 +1,8 @@
+general:
+  branches:
+    ignore:
+      - release # dont build release branch.
+
 machine:
   python:
     version: 2.7.3 # Python is used to install awscli.
