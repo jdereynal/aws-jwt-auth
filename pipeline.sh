@@ -28,7 +28,7 @@ EOF
             fi
             ;;
         deploy)
-            # Put new version of lambda out.
+            # Update lambda version in git and in the NotifyMe domain.
             mkdir lambda-deployment-package && \
             cp package.json lambda-deployment-package/ && \
             cp index.js lambda-deployment-package/ && \
