@@ -28,7 +28,7 @@ EOF
             fi
             ;;
         deploy)
-            # Update lambda version in git and in the NotifyMe domain.
+            # Update lambda version.
             mkdir lambda-deployment-package && \
             cp package.json lambda-deployment-package/ && \
             cp index.js lambda-deployment-package/ && \
@@ -40,18 +40,14 @@ EOF
             zip -r ../$CIRCLE_SHA1 . && \
             cd - && \
             rm -rf lambda-deployment-package/ && \
-            cp $CIRCLE_SHA1.zip lambda.zip && \
-            git config user.email "ako+circleci@byu.edu" && \
-            git config user.name "CircleCI" && \
-            git add lambda.zip && \
-            git commit -am "release $CIRCLE_SHA1 of lambda. [ci skip]" && \
-            git push && \
-            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET
+            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
+            cp $CIRCLE_SHA1.zip latest.zip && \
             aws lambda update-function-code \
                 --region $LAMBDA_FUNCTION_REGION \
                 --function-name $LAMBDA_FUNCTION \
                 --s3-bucket $BUCKET \
-                --s3-key $CIRCLE_SHA1.zip
+                --s3-key $CIRCLE_SHA1.zip && \
+            aws s3 cp latest.zip s3://$BUCKET
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to update lambda function code. Previous lambda function code will remain in place."
                 return 1
