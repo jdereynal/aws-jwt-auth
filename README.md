@@ -35,7 +35,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 9. Click "Next" in the bottom right-hand corner.
     + If any errors occur after you click "Next," adjust any neccesary fields and click "Next" again.
 10. You will be asked to review your Lambda function details. Click "Create function" to finish the process and actually create your lambda function.
-11. Awesome! You have now created your lambda function. Now we just need to [add the lambda function as a custom authorizer](#add-a-custom-authorizer) in our API.
+11. Awesome! You have now created your lambda function. Now you just need to [add the lambda function as a custom authorizer](#add-a-custom-authorizer) in our API.
 
 ### Add A Custom Authorizer
 You will need to add the `verifyJWT` lambda function as a custom authorizer for your api.
