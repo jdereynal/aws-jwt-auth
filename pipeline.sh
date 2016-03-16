@@ -41,6 +41,7 @@ EOF
             cd - && \
             rm -rf lambda-deployment-package/ && \
             cp $CIRCLE_SHA1.zip latest.zip && \
+            cp latest.zip byuawsjwtauthorizer.zip && \
             aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             aws s3 cp latest.zip s3://$BUCKET && \
             aws lambda update-function-code \
