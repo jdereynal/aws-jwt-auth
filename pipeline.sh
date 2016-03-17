@@ -29,8 +29,8 @@ EOF
             ;;
         deploy)
             make_lambda_deployment_package && \
-            push_release_to_github && \
-            upload_packages_to_s3 && \
+            push_to_github && \
+            upload_to_s3 && \
             update_lambda
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to update lambda function code. Previous lambda function code will remain in place."
@@ -74,7 +74,7 @@ make_lambda_deployment_package() {
     rm -rf lambda-deployment-package/
 }
 
-push_release_to_github() {
+push_to_github() {
     # Sticking the byuawsjwtauthorizer.zip inside of the release-staging folder
     # and then extracting it back out preserves the local version,
     # which is the one we want to keep and push out to the release branch in the first place.
@@ -94,7 +94,7 @@ push_release_to_github() {
     git checkout master
 }
 
-upload_packages_to_s3() {
+upload_to_s3() {
     aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
     aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET/latest.zip
 }
