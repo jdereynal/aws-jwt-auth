@@ -37,18 +37,18 @@ aws lambda create-function \
 **Note**: We will be using the AWS CLI to add our custom authorizer to our API, but you could also do so through the AWS console.
 
 1. Create the authorizer for your API:
-```bash
-aws apigateway create-authorizer \
---rest-api-id <your_rest_api_id> \
---name verify-jwt \
---type TOKEN \
---authorizer-uri <your_authorizer_uri> \
---identity-source <your_identity_source>
-```
+    ```bash
+    aws apigateway create-authorizer \
+    --rest-api-id <your_rest_api_id> \
+    --name verify-jwt \
+    --type TOKEN \
+    --authorizer-uri <your_authorizer_uri> \
+    --identity-source <your_identity_source>
+    ```
 
-+ You can get the id for your rest api from `aws apigateway get-rest-apis`.
-+ `authorizer-uri` will look something like: `arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/[FunctionARN]/invocations`. Replace `{region}` with the aws region where your API exists. Replace `[FunctionARN]` with your lambda function's arn. You can get your function arn from `aws lambda get-function --function-name verifyJWT`.
-+ The `identity-source` should look like `method.request.header.Name-Of-Your-Authorization-Header`.
+    + You can get the id for your rest api from `aws apigateway get-rest-apis`.
+    + `authorizer-uri` will look something like: `arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/[FunctionARN]/invocations`. Replace `{region}` with the aws region where your API exists. Replace `[FunctionARN]` with your lambda function's arn. You can get your function arn from `aws lambda get-function --function-name verifyJWT`.
+    + The `identity-source` should look like `method.request.header.Name-Of-Your-Authorization-Header`.
 
 2. Add permission for the custom authorizer to invoke our lambda function:
 ```bash
