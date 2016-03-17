@@ -23,3 +23,5 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 ### Add A Custom Authorizer
 
 **Note**: We will be using the AWS CLI to add our custom authorizer to our API, but you could also do so through the AWS console.
+
+1. Checkout a local copy of this repository.
