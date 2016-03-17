@@ -1,3 +1,5 @@
+# These docs are currently a work in progress!
+
 # AWS JWT Authorizer [![Build Status](https://circleci.com/gh/byu-oit-appdev/aws-jwt-auth.svg?style=shield)](https://circleci.com/gh/byu-oit-appdev/aws-jwt-auth)
 
 An AWS Lambda function intended to be used as an AWS API Gateway custom authorizer to verify JWTs.
@@ -17,7 +19,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 1. Checkout a local copy of this repository.
 2. From the repository root, checkout the release branch: `git checkout -b release origin/release`.
 3. Unzip the deployment package: `unzip awsjwtauthorizer.zip`.
-4. Add the key/secret you will use to verify your JWTs to `config.yml`.
+4. Add the key/secret you will use to verify your JWTs to `authorizer.yml`.
 5. Run `make`.
 
 ### Add A Custom Authorizer
