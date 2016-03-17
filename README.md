@@ -29,11 +29,19 @@ aws lambda create-function \
     --role <your_lambda_execution_role_arn> \
     --handler index.handler \
     --zip-file fileb://awsjwtauthorizer.zip \
-    --description A lambda function for verifying jwts
+    --description "A lambda function for verifying JWTs"
 ```
 
 ### Add A Custom Authorizer
 
 **Note**: We will be using the AWS CLI to add our custom authorizer to our API, but you could also do so through the AWS console.
 
-1. Checkout a local copy of this repository.
+1. Create the authorizer for your API:
+```bash
+aws apigateway create-authorizer \
+--rest-api-id <your_rest_api_id> # You can get the id for your rest api from `aws apigateway get-rest-apis`
+--name verify-jwt
+--type TOKEN
+--authorizer-uri <your_authorizer_uri> # This will look something like arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/[FunctionARN]/invokations. You can get your function from `aws lambda get-function --function-name verifyJWT`
+--identity-source <your_identity_source> # Should look something like method.requet.header.Name-Of-Your-Authorization-Header
+```
