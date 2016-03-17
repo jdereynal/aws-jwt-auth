@@ -49,6 +49,7 @@ aws apigateway create-authorizer \
 + You can get the id for your rest api from `aws apigateway get-rest-apis`.
 + `authorizer-uri` will look something like: `arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/[FunctionARN]/invocations`. Replace `{region}` with the aws region where your API exists. Replace `[FunctionARN]` with your lambda function's arn. You can get your function arn from `aws lambda get-function --function-name verifyJWT`.
 + The `identity-source` should look like `method.request.header.Name-Of-Your-Authorization-Header`.
+
 2. Add permission for the custom authorizer to invoke our lambda function:
 ```bash
 aws lambda add-permission \
@@ -58,10 +59,10 @@ aws lambda add-permission \
 --principal apigateway.amazonaws.com \
 --source-arn arn:aws:execute-api:{region}:{aws-account-id}:{rest-api-id}/authorizers/{authorizer-id}
 ```
++ `<FunctionARN>` is the same `FunctionARN` we used in the `create-authorizer` step.
++ `statement-id`: A unique (to this specific lambda function's policy) statment identifier.
++ `source-arn`: Replace `{region}`, `{aws-account-id}`, `{rest-api-id}`, and `{authorizer-id}` with the actual values for your authorizer. You can get your `rest-api-id` from `aws apigateway get-rest-apis`. You can get your `authorizer-id` from `aws apigateway get-authorizers --rest-api-id <rest_api_id>`
 
-   + `<FunctionARN>` is the same `FunctionARN` we used in the `create-authorizer` step.
-   + `statement-id`: A unique (to this specific lambda function's policy) statment identifier.
-   + `source-arn`: Replace `{region}`, `{aws-account-id}`, `{rest-api-id}`, and `{authorizer-id}` with the actual values for your authorizer. You can get your `rest-api-id` from `aws apigateway get-rest-apis`. You can get your `authorizer-id` from `aws apigateway get-authorizers --rest-api-id <rest_api_id>`
 3. Now we just need to add our custom authorizer to our API methods that we want to use it:
 ```bash
 aws apigateway update-method \
