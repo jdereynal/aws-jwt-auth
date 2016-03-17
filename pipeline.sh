@@ -21,7 +21,13 @@ EOF
 
     case "$1" in
         start)
-            say "$PIPELINE deployment started."
+            say "$PIPELINE deployment started." && \
+            LAST_WORKING_PRODUCTION_LAMBDA_VERSION=$(aws lambda get-alias \
+                --region $LAMBDA_FUNCTION_REGION \
+                --function-name $LAMBDA_FUNCTION \
+                --name PROD \
+                --query FunctionVersion) && \
+            echo -n "$LAST_WORKING_PRODUCTION_LAMBDA_VERSION" > /tmp/last-working-production-lambda-version
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to initialize pipeline. Previous lambda function code will remain in place."
                 return 1
@@ -40,6 +46,28 @@ EOF
         run-tests)
             shift
             run_tests "$@"
+            ;;
+        release)
+            # Update prod lambda alias to new version.
+            aws lambda update-alias \
+                --region $LAMBDA_FUNCTION_REGION \
+                --function-name $LAMBDA_FUNCTION \
+                --name PROD \
+                --function-version $(cat /tmp/new-lambda-version | tr -d '"')
+            if [ "$?" -ne 0 ]; then
+                __write_failure_msg "Error while attempting to update lambda PROD alias. Previous PROD alias will remain in place."
+                return 1
+            fi
+            ;;
+        rollback)
+            # Update prod lambda alias to last working version.
+            aws lambda update-alias \
+                --region $LAMBDA_FUNCTION_REGION \
+                --function-name $LAMBDA_FUNCTION \
+                --name PROD \
+                --function-version $(cat /tmp/last-working-production-lambda-version | tr -d '"')
+            __write_failure_msg "$PIPELINE production tests failed. Rolled back PROD lambda alias to last working version."
+            return 0
             ;;
         finish)
             say "$PIPELINE deployment finished succesfully."
@@ -102,11 +130,14 @@ upload_to_s3() {
 }
 
 update_lambda() {
-    aws lambda update-function-code \
+    local version_to_release_if_succesful=$(aws lambda update-function-code \
         --region $LAMBDA_FUNCTION_REGION \
         --function-name $LAMBDA_FUNCTION \
         --s3-bucket $BUCKET \
-        --s3-key $CIRCLE_SHA1.zip
+        --s3-key $CIRCLE_SHA1.zip \
+        --publish \
+        --query Version) && \
+    echo -n "$version_to_release_if_succesful" > /tmp/new-lambda-version
 }
 
 say() {
