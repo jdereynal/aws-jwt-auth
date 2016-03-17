@@ -28,7 +28,7 @@ aws lambda create-function \
     --runtime nodejs \
     --role <your_lambda_execution_role_arn> \
     --handler index.handler \
-    --zip-file fileb://auwsjwtauthorizer.zip
+    --zip-file fileb://awsjwtauthorizer.zip
 ```
 
 ### Add A Custom Authorizer
