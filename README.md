@@ -14,6 +14,10 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 
 **Note**: We will be using the AWS CLI to create our lambda function, but you could also do so through the AWS console.
 
+1. Checkout a local copy of this repository.
+2. From the repository root, checkout the release branch (`git checkout -b release origin/release`)
+3. 
+
 ### Add A Custom Authorizer
 
 **Note**: We will be using the AWS CLI to add our custom authorizer to our API, but you could also do so through the AWS console.
