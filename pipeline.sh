@@ -6,6 +6,7 @@ LAMBDA_FUNCTION_REGION=us-west-2
 LAMBDA_FUNCTION=verifyJWT
 
 pipeline() {
+    # Force pipeline build.
     # If our deployment environment file doesnt exist already, create it.
     if [ ! -f /tmp/aws-deployment.env ]; then
         touch /tmp/aws-deployment.env
