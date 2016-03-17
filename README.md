@@ -51,37 +51,37 @@ aws lambda create-function \
     + The `identity-source` should look like `method.request.header.Name-Of-Your-Authorization-Header`.
 
 2. Add permission for the custom authorizer to invoke our lambda function:
-```bash
-aws lambda add-permission \
---function-name <FunctionARN> \
---statement-id <some_unique_statement_id> \
---action lambda:invokeFunction \
---principal apigateway.amazonaws.com \
---source-arn arn:aws:execute-api:{region}:{aws-account-id}:{rest-api-id}/authorizers/{authorizer-id}
-```
+    ```bash
+    aws lambda add-permission \
+    --function-name <FunctionARN> \
+    --statement-id <some_unique_statement_id> \
+    --action lambda:invokeFunction \
+    --principal apigateway.amazonaws.com \
+    --source-arn arn:aws:execute-api:{region}:{aws-account-id}:{rest-api-id}/authorizers/{authorizer-id}
+    ```
 
-+ `<FunctionARN>` is the same `FunctionARN` we used in the `create-authorizer` step.
-+ `statement-id`: A unique (to this specific lambda function's policy) statment identifier.
-+ `source-arn`: Replace `{region}`, `{aws-account-id}`, `{rest-api-id}`, and `{authorizer-id}` with the actual values for your authorizer. You can get your `rest-api-id` from `aws apigateway get-rest-apis`. You can get your `authorizer-id` from `aws apigateway get-authorizers --rest-api-id <rest_api_id>`
+    + `<FunctionARN>` is the same `FunctionARN` we used in the `create-authorizer` step.
+    + `statement-id`: A unique (to this specific lambda function's policy) statment identifier.
+    + `source-arn`: Replace `{region}`, `{aws-account-id}`, `{rest-api-id}`, and `{authorizer-id}` with the actual values for your authorizer. You can get your `rest-api-id` from `aws apigateway get-rest-apis`. You can get your `authorizer-id` from `aws apigateway get-authorizers --rest-api-id <rest_api_id>`
 
 3. Now we just need to add our custom authorizer to our API methods that we want to use it:
-```bash
-aws apigateway update-method \
---rest-api-id <rest_api_id> \
---resource-id <api_resource_id> \
---http-method <api_method> \
---patch-operations \
-"op=replace,path-/authorizationType,value=CUSTOM" \
-"op=replace,path=/authorizerId,value={authorizer-id}"
-```
+    ```bash
+    aws apigateway update-method \
+    --rest-api-id <rest_api_id> \
+    --resource-id <api_resource_id> \
+    --http-method <api_method> \
+    --patch-operations \
+    "op=replace,path-/authorizationType,value=CUSTOM" \
+    "op=replace,path=/authorizerId,value={authorizer-id}"
+    ```
 
-+ Replace all placeholders with their actual values.
+    + Replace all placeholders with their actual values.
 
 4. Deploy your API for the changes to take effect:
-```bash
-aws apigateway create-deployment \
---rest-api-id <rest_api_id>
---stage-name <deployment_stage>
-```
+    ```bash
+    aws apigateway create-deployment \
+    --rest-api-id <rest_api_id>
+    --stage-name <deployment_stage>
+    ```
 
-+ Replace all placeholders with their actual values.
+    + Replace all placeholders with their actual values.
