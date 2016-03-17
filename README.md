@@ -73,7 +73,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
         --resource-id <api_resource_id> \
         --http-method <api_method> \
         --patch-operations \
-        "op=replace,path-/authorizationType,value=CUSTOM" \
+        "op=replace,path=/authorizationType,value=CUSTOM" \
         "op=replace,path=/authorizerId,value={authorizer-id}"
     ```
 
