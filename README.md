@@ -59,6 +59,7 @@ aws lambda add-permission \
 --principal apigateway.amazonaws.com \
 --source-arn arn:aws:execute-api:{region}:{aws-account-id}:{rest-api-id}/authorizers/{authorizer-id}
 ```
+
 + `<FunctionARN>` is the same `FunctionARN` we used in the `create-authorizer` step.
 + `statement-id`: A unique (to this specific lambda function's policy) statment identifier.
 + `source-arn`: Replace `{region}`, `{aws-account-id}`, `{rest-api-id}`, and `{authorizer-id}` with the actual values for your authorizer. You can get your `rest-api-id` from `aws apigateway get-rest-apis`. You can get your `authorizer-id` from `aws apigateway get-authorizers --rest-api-id <rest_api_id>`
@@ -74,7 +75,8 @@ aws apigateway update-method \
 "op=replace,path=/authorizerId,value={authorizer-id}"
 ```
 
-    + Replace all placeholders with their actual values.
++ Replace all placeholders with their actual values.
+
 4. Deploy your API for the changes to take effect:
 ```bash
 aws apigateway create-deployment \
@@ -82,4 +84,4 @@ aws apigateway create-deployment \
 --stage-name <deployment_stage>
 ```
 
-    + Replace all placeholders with their actual values.
++ Replace all placeholders with their actual values.
