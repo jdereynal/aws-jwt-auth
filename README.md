@@ -80,7 +80,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 4. Deploy your API for the changes to take effect:
     ```bash
     aws apigateway create-deployment \
-        --rest-api-id <rest_api_id>
+        --rest-api-id <rest_api_id> \
         --stage-name <deployment_stage>
     ```
 
