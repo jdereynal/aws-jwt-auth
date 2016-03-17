@@ -57,6 +57,7 @@ EOF
             git add byuawsjwtauthorizer.zip && \
             git commit -m "Release new version ($CIRCLE_SHA1) of authorizer." && \
             git push && \
+            git checkout master && \
             aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             aws s3 cp latest.zip s3://$BUCKET && \
             aws lambda update-function-code \
