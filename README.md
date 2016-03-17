@@ -22,7 +22,6 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 4. Add the key/secret you will use to verify your JWTs to `authorizer.yml`.
 5. Run `make`.
 6. Create the lambda function using the deployment packge:
-
     ```bash
     aws lambda create-function \
         --function-name verifyJWT \
