@@ -115,7 +115,7 @@ push_to_github() {
     git config user.name "CircleCI Deployment Bot" && \
     git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
     git config push.default simple && \
-    git checkout -b release origin/release && \
+    git checkout release && \
     git pull --rebase && \
     mv release-staging/$lambda_package_name.zip . && \
     git add $lambda_package_name.zip && \
