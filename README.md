@@ -1,4 +1,4 @@
-# AWS JWT Authorizer
+# AWS JWT Authorizer [![Build Status](https://circleci.com/gh/byu-oit-appdev/aws-jwt-auth.svg?style=shield)](https://circleci.com/gh/byu-oit-appdev/aws-jwt-auth)
 An AWS Lambda function intended to be used as an AWS API Gateway custom authorizer to verify JWTs.
 
 ## Usage
