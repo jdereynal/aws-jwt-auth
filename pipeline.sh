@@ -145,6 +145,9 @@ say() {
 }
 
 run_tests() {
+    if [ "$1" == "prod" ]; then
+        return 1
+    fi
     return 0
 }
 
