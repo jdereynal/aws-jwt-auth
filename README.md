@@ -26,7 +26,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 aws lambda create-function \
     --function-name verifyJWT \
     --runtime nodejs \
-    --role <your_lambda_execution_role> \
+    --role <your_lambda_execution_role_arn> \
     --handler index.handler \
     --zip-file fileb://auwsjwtauthorizer.zip
 ```
