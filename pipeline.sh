@@ -55,7 +55,7 @@ EOF
             git pull --rebase && \
             mv release-staging/byuawsjwtauthorizer.zip . && \
             git add byuawsjwtauthorizer.zip && \
-            git commit -m "Push new version of byuawsjwtauthorizer.zip based on code revision $CIRCLE_SHA1." && \
+            git commit -m "Push new version of function based on code revision $CIRCLE_SHA1." && \
             git push && \
             aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
             aws s3 cp latest.zip s3://$BUCKET && \
