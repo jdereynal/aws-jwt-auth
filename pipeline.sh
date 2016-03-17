@@ -75,20 +75,21 @@ make_lambda_deployment_package() {
 }
 
 push_to_github() {
-    # Sticking the byuawsjwtauthorizer.zip inside of the release-staging folder
+    local lambda_package_name=awsjwtauthorizer
+    # Sticking the awsjwtauthorizer.zip inside of the release-staging folder
     # and then extracting it back out preserves the local version,
     # which is the one we want to keep and push out to the release branch in the first place.
     # Git will complain if you try to checkout a branch that would overwrite your local changes anyway.
-    cp $CIRCLE_SHA1.zip byuawsjwtauthorizer.zip && \
+    cp $CIRCLE_SHA1.zip $lambda_package_name.zip && \
     mkdir release-staging && \
-    mv byuawsjwtauthorizer.zip release-staging/ && \
+    mv $lambda_package_name.zip release-staging/ && \
     git config user.name "CircleCI Deployment Bot" && \
     git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
     git config push.default simple && \
     git checkout -b release origin/release && \
     git pull --rebase && \
-    mv release-staging/byuawsjwtauthorizer.zip . && \
-    git add byuawsjwtauthorizer.zip && \
+    mv release-staging/$lambda_package_name.zip . && \
+    git add $lambda_package_name.zip && \
     git commit -m "Release new version ($CIRCLE_SHA1) of authorizer." && \
     git push && \
     git checkout master
