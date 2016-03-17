@@ -15,8 +15,8 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 **Note**: We will be using the AWS CLI to create our lambda function, but you could also do so through the AWS console.
 
 1. Checkout a local copy of this repository.
-2. From the repository root, checkout the release branch (`git checkout -b release origin/release`)
-3. Run `unzip awsjwtauthorizer.zip`
+2. From the repository root, checkout the release branch: `git checkout -b release origin/release`.
+3. Unzip the deployment package: `unzip awsjwtauthorizer.zip`.
 4. Replace `key.pem` with the public key you will use to verify your JWTs.
 5. Run `make`.
 
