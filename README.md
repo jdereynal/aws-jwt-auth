@@ -46,6 +46,7 @@ aws apigateway create-authorizer \
 --identity-source <your_identity_source>
 ```
 
+
     + You can get the id for your rest api from `aws apigateway get-rest-apis`.
     + `authorizer-uri` will look something like: `arn:aws:apigateway:{region}:lambda:path/2015-03-31/functions/[FunctionARN]/invocations`. Replace `{region}` with the aws region where your API exists. Replace `[FunctionARN]` with your lambda function's arn. You can get your function arn from `aws lambda get-function --function-name verifyJWT`.
     + The `identity-source` should look like `method.request.header.Name-Of-Your-Authorization-Header`.
