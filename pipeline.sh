@@ -50,6 +50,7 @@ EOF
             mv byuawsjwtauthorizer.zip release-staging/ && \
             git config user.name "CircleCI Deployment Bot" && \
             git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
+            git config push.default simple && \
             git checkout -b release origin/release && \
             git pull --rebase && \
             mv release-staging/byuawsjwtauthorizer.zip . && \
