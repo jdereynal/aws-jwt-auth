@@ -28,43 +28,10 @@ EOF
             fi
             ;;
         deploy)
-            # Update lambda version.
-            # Sticking the byuawsjwtauthorizer.zip inside of the release-staging folder on lines
-            # 46 & 47, and then extracting it back out on line 53 preserves the local version,
-            # which is the one we want to keep and push out to the release branch in the first place.
-            # Git will complain if you try to checkout a branch that would overwrite your local changes anyway.
-            mkdir lambda-deployment-package && \
-            cp package.json lambda-deployment-package/ && \
-            cp index.js lambda-deployment-package/ && \
-            cp README.md lambda-deployment-package/ && \
-            cd lambda-deployment-package/ && \
-            npm install && \
-            rm README.md && \
-            rm package.json && \
-            zip -r ../$CIRCLE_SHA1 . && \
-            cd - && \
-            rm -rf lambda-deployment-package/ && \
-            cp $CIRCLE_SHA1.zip latest.zip && \
-            cp latest.zip byuawsjwtauthorizer.zip && \
-            mkdir release-staging && \
-            mv byuawsjwtauthorizer.zip release-staging/ && \
-            git config user.name "CircleCI Deployment Bot" && \
-            git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
-            git config push.default simple && \
-            git checkout -b release origin/release && \
-            git pull --rebase && \
-            mv release-staging/byuawsjwtauthorizer.zip . && \
-            git add byuawsjwtauthorizer.zip && \
-            git commit -m "Release new version ($CIRCLE_SHA1) of authorizer." && \
-            git push && \
-            git checkout master && \
-            aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
-            aws s3 cp latest.zip s3://$BUCKET && \
-            aws lambda update-function-code \
-                --region $LAMBDA_FUNCTION_REGION \
-                --function-name $LAMBDA_FUNCTION \
-                --s3-bucket $BUCKET \
-                --s3-key $CIRCLE_SHA1.zip
+            make_lambda_deployment_package() && \
+            push_release_to_github() && \
+            upload_packages_to_s3() && \
+            update_lambda()
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to update lambda function code. Previous lambda function code will remain in place."
                 return 1
@@ -72,7 +39,7 @@ EOF
             ;;
         run-tests)
             shift
-            run-tests "$@"
+            run_tests "$@"
             ;;
         finish)
             say "$PIPELINE deployment finished succesfully."
@@ -93,11 +60,58 @@ EOF
     esac
 }
 
+make_lambda_deployment_package() {
+    mkdir lambda-deployment-package && \
+    cp package.json lambda-deployment-package/ && \
+    cp index.js lambda-deployment-package/ && \
+    cp README.md lambda-deployment-package/ && \
+    cd lambda-deployment-package/ && \
+    npm install && \
+    rm README.md && \
+    rm package.json && \
+    zip -r ../$CIRCLE_SHA1 . && \
+    cd - && \
+    rm -rf lambda-deployment-package/
+}
+
+push_release_to_github() {
+    # Sticking the byuawsjwtauthorizer.zip inside of the release-staging folder
+    # and then extracting it back out preserves the local version,
+    # which is the one we want to keep and push out to the release branch in the first place.
+    # Git will complain if you try to checkout a branch that would overwrite your local changes anyway.
+    cp $CIRCLE_SHA1.zip byuawsjwtauthorizer.zip && \
+    mkdir release-staging && \
+    mv byuawsjwtauthorizer.zip release-staging/ && \
+    git config user.name "CircleCI Deployment Bot" && \
+    git config user.email "circleci@byu-oit-appdev/aws-jwt-auth" && \
+    git config push.default simple && \
+    git checkout -b release origin/release && \
+    git pull --rebase && \
+    mv release-staging/byuawsjwtauthorizer.zip . && \
+    git add byuawsjwtauthorizer.zip && \
+    git commit -m "Release new version ($CIRCLE_SHA1) of authorizer." && \
+    git push && \
+    git checkout master
+}
+
+upload_packages_to_s3() {
+    aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET && \
+    aws s3 cp $CIRCLE_SHA1.zip s3://$BUCKET/latest.zip
+}
+
+update_lambda() {
+    aws lambda update-function-code \
+        --region $LAMBDA_FUNCTION_REGION \
+        --function-name $LAMBDA_FUNCTION \
+        --s3-bucket $BUCKET \
+        --s3-key $CIRCLE_SHA1.zip
+}
+
 say() {
     docker run --env-file /tmp/aws-deployment.env -v /tmp:/tmp quay.io/byuoit/aws-deployment slack_say "$@"
 }
 
-run-tests() {
+run_tests() {
     return 0
 }
 
