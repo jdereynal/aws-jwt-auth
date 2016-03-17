@@ -28,7 +28,8 @@ aws lambda create-function \
     --runtime nodejs \
     --role <your_lambda_execution_role_arn> \
     --handler index.handler \
-    --zip-file fileb://awsjwtauthorizer.zip
+    --zip-file fileb://awsjwtauthorizer.zip \
+    --description A lambda function for verifying jwts
 ```
 
 ### Add A Custom Authorizer
