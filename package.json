@@ -8,6 +8,7 @@
   },
   "keywords": [
     "aws",
+    "lambda",
     "jwt",
     "auth"
   ],
