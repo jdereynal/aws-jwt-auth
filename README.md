@@ -22,6 +22,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 4. Add the key/secret you will use to verify your JWTs to `authorizer.yml`.
 5. Run `make`.
 6. Create the lambda function using the deployment packge:
+
     ```bash
     aws lambda create-function \
         --function-name verifyJWT \
@@ -37,6 +38,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 **Note**: We will be using the AWS CLI to add our custom authorizer to our API, but you could also do so through the AWS console.
 
 1. Create the authorizer for your API:
+
     ```bash
     aws apigateway create-authorizer \
         --rest-api-id <your_rest_api_id> \
@@ -51,6 +53,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
     + The `identity-source` should look like `method.request.header.Name-Of-Your-Authorization-Header`.
 
 2. Add permission for the custom authorizer to invoke our lambda function:
+
     ```bash
     aws lambda add-permission \
         --function-name <FunctionARN> \
@@ -65,6 +68,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
     + `source-arn`: Replace `{region}`, `{aws-account-id}`, `{rest-api-id}`, and `{authorizer-id}` with the actual values for your authorizer. You can get your `rest-api-id` from `aws apigateway get-rest-apis`. You can get your `authorizer-id` from `aws apigateway get-authorizers --rest-api-id <rest_api_id>`
 
 3. Now we just need to add our custom authorizer to our API methods that we want to use it:
+
     ```bash
     aws apigateway update-method \
         --rest-api-id <rest_api_id> \
@@ -78,6 +82,7 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
     + Replace all placeholders with their actual values.
 
 4. Deploy your API for the changes to take effect:
+
     ```bash
     aws apigateway create-deployment \
         --rest-api-id <rest_api_id> \
