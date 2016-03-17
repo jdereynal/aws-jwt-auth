@@ -28,10 +28,10 @@ EOF
             fi
             ;;
         deploy)
-            make_lambda_deployment_package() && \
-            push_release_to_github() && \
-            upload_packages_to_s3() && \
-            update_lambda()
+            make_lambda_deployment_package && \
+            push_release_to_github && \
+            upload_packages_to_s3 && \
+            update_lambda
             if [ "$?" -ne 0 ]; then
                 __write_failure_msg "Error while attempting to update lambda function code. Previous lambda function code will remain in place."
                 return 1
