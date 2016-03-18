@@ -6,6 +6,7 @@ exports.handler = function(event, context) {
 
     // validate the incoming token
     // and produce the principal user identifier associated with the token
+    // try this thing.
 
     // this could be accomplished in a number of ways:
     // 1. Call out to OAuth provider
