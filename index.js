@@ -8,9 +8,6 @@ exports.handler = function(event, context) {
     console.log('Client token: ' + event.authorizationToken);
     console.log('Method ARN: ' + event.methodArn);
 
-    var config = yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'authorizer.yml'), 'utf8'));
-    console.log('===== Secret: ====', config.secret);
-
     // validate the incoming token
     // and produce the principal user identifier associated with the token
     // this could be accomplished in a number of ways:
