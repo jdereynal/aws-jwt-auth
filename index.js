@@ -31,7 +31,7 @@ exports.handler = function(event, context) {
             apiOptions.stage = apiGatewayArnTmp[1];
             var method = apiGatewayArnTmp[2];
             var resource = '/'; // root resource
-            
+
             if (apiGatewayArnTmp[3]) {
                 resource += apiGatewayArnTmp[3];
             }
@@ -42,7 +42,7 @@ exports.handler = function(event, context) {
 
             // finally, build the policy and exit the function using context.succeed()
             context.succeed(policy.build());
-        }).fail(function(res) {
+        }).catch(function(res) {
             console.log(res);
 
             // build apiOptions for the AuthPolicy
@@ -79,7 +79,7 @@ exports.handler = function(event, context) {
         console.log('Validating JWT (', jwt, ') using jsonwebtoken library.');
         jsonwebtoken.verify(jwt, config.secret).then(function(res) {
             console.log(res);
-        }).fail(function(res) {
+        }).catch(function(res) {
             console.log(res);
         });
     }
