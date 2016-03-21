@@ -8,7 +8,6 @@ exports.handler = function(event, context) {
     console.log('Client token: ' + event.authorizationToken);
     console.log('Method ARN: ' + event.methodArn);
 
-    console.log(path.join(process.cwd(), 'authorizer.yml'));
     var config = yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'authorizer.yml'), 'utf8'));
     console.log('===== Secret: ====', config.secret);
 
