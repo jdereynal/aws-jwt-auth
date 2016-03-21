@@ -6,8 +6,6 @@ exports.handler = function(event, context) {
 
     // validate the incoming token
     // and produce the principal user identifier associated with the token
-    // try this thing.
-
     // this could be accomplished in a number of ways:
     // 1. Call out to OAuth provider
     // 2. Decode a JWT token inline
@@ -35,9 +33,6 @@ exports.handler = function(event, context) {
     if (apiGatewayArnTmp[3]) {
         resource += apiGatewayArnTmp[3];
     }
-
-    console.log('Whats up?????');
-    console.log(event, context);
 
     // this function must generate a policy that is associated with the recognized principal user identifier.
     // depending on your use case, you might store policies in a DB, or generate them on the fly
