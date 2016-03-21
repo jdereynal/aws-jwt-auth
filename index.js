@@ -6,34 +6,44 @@ var path = require('path');
 
 var BYU_WSO2_WELL_KNOWN_URL = 'https://api.byu.edu/.well-known/openid-configuration';
 
+var WSO2_CLAIMS_PREFIX = 'http://wso2.org/claims/';
+var BYU_CLAIMS_PREFIX = 'http://byu.edu/claims/';
+
 exports.handler = function(event, context) {
     console.log('Client token: ' + event.authorizationToken);
     console.log('Method ARN: ' + event.methodArn);
 
     var jwt = event.authorizationToken.split(" ")[1];
     var config = yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'authorizer.yml'), 'utf8'));
-    var validated = false;
 
     // Validate the JWT using the byu-jwt library.
     if (config.secret === 'byuwso2') {
         console.log('Validating JWT (', jwt, ') using byu-jwt library.');
         byuJWT.verifyJWT(jwt, BYU_WSO2_WELL_KNOWN_URL).then(function(res) {
+            var principalId = res[BYU_CLAIMS_PREFIX + 'client_net_id'];
+
+            var apiOptions = {};
+            var tmp = event.methodArn.split(':');
+            var apiGatewayArnTmp = tmp[5].split('/');
+            var awsAccountId = tmp[4];
+            apiOptions.region = tmp[3];
+            apiOptions.restApiId = apiGatewayArnTmp[0];
+            apiOptions.stage = apiGatewayArnTmp[1];
+            var method = apiGatewayArnTmp[2];
+            var resource = '/'; // root resource
+            
+            if (apiGatewayArnTmp[3]) {
+                resource += apiGatewayArnTmp[3];
+            }
+
+            var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
+            policy.allowAllMethods();
+            // policy.allowMethod(AuthPolicy.HttpVerb.GET, "/users/username");
+
+            // finally, build the policy and exit the function using context.succeed()
+            context.succeed(policy.build());
+        }).fail(function(res) {
             console.log(res);
-            // validate the incoming token
-            // and produce the principal user identifier associated with the token
-            // this could be accomplished in a number of ways:
-            // 1. Call out to OAuth provider
-            // 2. Decode a JWT token inline
-            // 3. Lookup in a self-managed DB
-            var principalId = 'user|a1b2c3d4';
-
-            // you can send a 401 Unauthorized response to the client by failing like so:
-            // context.fail("Unauthorized");
-
-            // if the token is valid, a policy must be generated which will allow or deny access to the client
-
-            // if access is denied, the client will recieve a 403 Access Denied response
-            // if access is allowed, API Gateway will proceed with the backend integration configured on the method that was called
 
             // build apiOptions for the AuthPolicy
             var apiOptions = {};
@@ -63,11 +73,14 @@ exports.handler = function(event, context) {
 
             // finally, build the policy and exit the function using context.succeed()
             context.succeed(policy.build());
+
         });
     } else {
+        console.log('Validating JWT (', jwt, ') using jsonwebtoken library.');
         jsonwebtoken.verify(jwt, config.secret).then(function(res) {
             console.log(res);
-            context.fail(new Error('Generic JWT verification not yet implemented.'));
+        }).fail(function(res) {
+            console.log(res);
         });
     }
 };
