@@ -16,7 +16,7 @@ exports.handler = function(event, context) {
 
     // Validate the JWT using the byu-jwt library.
     if (config.secret === 'byuwso2') {
-        console.log('Validating JWT using byu-jwt library.');
+        console.log('Validating JWT (', jwt, ') using byu-jwt library.');
         byuJWT.verifyJWT(jwt, BYU_WSO2_WELL_KNOWN_URL).then(function(res) {
             console.log(res);
             // validate the incoming token
