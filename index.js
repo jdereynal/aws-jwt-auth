@@ -2,12 +2,14 @@ var jwt = require('jsonwebtoken');
 var byuJWT = require('byu-jwt');
 var yaml = require('js-yaml');
 var fs = require('fs');
+var path = require('path');
 
 exports.handler = function(event, context) {
     console.log('Client token: ' + event.authorizationToken);
     console.log('Method ARN: ' + event.methodArn);
 
-    var config = yaml.safeLoad(fs.readFileSync('authorizer.yml'), 'utf8');
+    console.log(path.join(process.cwd(), 'authorizer.yml'));
+    var config = yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'authorizer.yml')), 'utf8');
     console.log('===== Secret: ====', config.secret);
 
     // validate the incoming token
