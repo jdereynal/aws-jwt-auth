@@ -19,6 +19,7 @@
   "homepage": "https://github.com/byu-oit-appdev/aws-jwt-auth#readme",
   "dependencies": {
     "byu-jwt": "~0.0.8",
-    "js-yaml": "~3.5.5"
+    "js-yaml": "~3.5.5",
+    "jsonwebtoken": "~5.7.0"
   }
 }
