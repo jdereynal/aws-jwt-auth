@@ -1,57 +1,75 @@
-var jwt = require('jsonwebtoken');
+var jsonwebtoken = require('jsonwebtoken');
 var byuJWT = require('byu-jwt');
 var yaml = require('js-yaml');
 var fs = require('fs');
 var path = require('path');
 
+var BYU_WSO2_WELL_KNOWN_URL = 'https://api.byu.edu/.well-known/openid-configuration';
+
 exports.handler = function(event, context) {
     console.log('Client token: ' + event.authorizationToken);
     console.log('Method ARN: ' + event.methodArn);
 
-    // validate the incoming token
-    // and produce the principal user identifier associated with the token
-    // this could be accomplished in a number of ways:
-    // 1. Call out to OAuth provider
-    // 2. Decode a JWT token inline
-    // 3. Lookup in a self-managed DB
-    var principalId = 'user|a1b2c3d4';
+    var jwt = event.authorizationToken.split(" ")[1];
+    var config = yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'authorizer.yml'), 'utf8'));
+    var validated = false;
 
-    // you can send a 401 Unauthorized response to the client by failing like so:
-    // context.fail("Unauthorized");
+    // Validate the JWT using the byu-jwt library.
+    if (config.secret === 'byuwso2') {
+        console.log('Validating JWT using byu-jwt library.');
+        byuJWT.verifyJWT(jwt, BYU_WSO2_WELL_KNOWN_URL).then(function(res) {
+            console.log(res);
+            // validate the incoming token
+            // and produce the principal user identifier associated with the token
+            // this could be accomplished in a number of ways:
+            // 1. Call out to OAuth provider
+            // 2. Decode a JWT token inline
+            // 3. Lookup in a self-managed DB
+            var principalId = 'user|a1b2c3d4';
 
-    // if the token is valid, a policy must be generated which will allow or deny access to the client
+            // you can send a 401 Unauthorized response to the client by failing like so:
+            // context.fail("Unauthorized");
 
-    // if access is denied, the client will recieve a 403 Access Denied response
-    // if access is allowed, API Gateway will proceed with the backend integration configured on the method that was called
+            // if the token is valid, a policy must be generated which will allow or deny access to the client
 
-    // build apiOptions for the AuthPolicy
-    var apiOptions = {};
-    var tmp = event.methodArn.split(':');
-    var apiGatewayArnTmp = tmp[5].split('/');
-    var awsAccountId = tmp[4];
-    apiOptions.region = tmp[3];
-    apiOptions.restApiId = apiGatewayArnTmp[0];
-    apiOptions.stage = apiGatewayArnTmp[1];
-    var method = apiGatewayArnTmp[2];
-    var resource = '/'; // root resource
-    if (apiGatewayArnTmp[3]) {
-        resource += apiGatewayArnTmp[3];
+            // if access is denied, the client will recieve a 403 Access Denied response
+            // if access is allowed, API Gateway will proceed with the backend integration configured on the method that was called
+
+            // build apiOptions for the AuthPolicy
+            var apiOptions = {};
+            var tmp = event.methodArn.split(':');
+            var apiGatewayArnTmp = tmp[5].split('/');
+            var awsAccountId = tmp[4];
+            apiOptions.region = tmp[3];
+            apiOptions.restApiId = apiGatewayArnTmp[0];
+            apiOptions.stage = apiGatewayArnTmp[1];
+            var method = apiGatewayArnTmp[2];
+            var resource = '/'; // root resource
+            if (apiGatewayArnTmp[3]) {
+                resource += apiGatewayArnTmp[3];
+            }
+
+            // this function must generate a policy that is associated with the recognized principal user identifier.
+            // depending on your use case, you might store policies in a DB, or generate them on the fly
+
+            // keep in mind, the policy is cached for 5 minutes by default (TTL is configurable in the authorizer)
+            // and will apply to subsequent calls to any method/resource in the RestApi
+            // made with the same token
+
+            // the example policy below denies access to all resources in the RestApi
+            var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
+            policy.denyAllMethods();
+            // policy.allowMethod(AuthPolicy.HttpVerb.GET, "/users/username");
+
+            // finally, build the policy and exit the function using context.succeed()
+            context.succeed(policy.build());
+        });
+    } else {
+        jsonwebtoken.verify(jwt, config.secret).then(function(res) {
+            console.log(res);
+            context.fail(new Error('Generic JWT verification not yet implemented.'));
+        });
     }
-
-    // this function must generate a policy that is associated with the recognized principal user identifier.
-    // depending on your use case, you might store policies in a DB, or generate them on the fly
-
-    // keep in mind, the policy is cached for 5 minutes by default (TTL is configurable in the authorizer)
-    // and will apply to subsequent calls to any method/resource in the RestApi
-    // made with the same token
-
-    // the example policy below denies access to all resources in the RestApi
-    var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
-    policy.denyAllMethods();
-    // policy.allowMethod(AuthPolicy.HttpVerb.GET, "/users/username");
-
-    // finally, build the policy and exit the function using context.succeed()
-    context.succeed(policy.build());
 };
 
 /**
