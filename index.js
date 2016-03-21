@@ -36,6 +36,9 @@ exports.handler = function(event, context) {
         resource += apiGatewayArnTmp[3];
     }
 
+    console.log('Whats up?????');
+    console.log(event, context);
+
     // this function must generate a policy that is associated with the recognized principal user identifier.
     // depending on your use case, you might store policies in a DB, or generate them on the fly
 
