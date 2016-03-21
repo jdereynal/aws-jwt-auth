@@ -59,13 +59,6 @@ exports.handler = function(event, context) {
                 resource += apiGatewayArnTmp[3];
             }
 
-            // this function must generate a policy that is associated with the recognized principal user identifier.
-            // depending on your use case, you might store policies in a DB, or generate them on the fly
-
-            // keep in mind, the policy is cached for 5 minutes by default (TTL is configurable in the authorizer)
-            // and will apply to subsequent calls to any method/resource in the RestApi
-            // made with the same token
-
             // the example policy below denies access to all resources in the RestApi
             var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
             policy.denyAllMethods();
