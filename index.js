@@ -40,8 +40,8 @@ exports.handler = function(event, context) {
             policy.allowAllMethods();
             // policy.allowMethod(AuthPolicy.HttpVerb.GET, "/users/username");
 
-            // finally, build the policy and exit the function using context.succeed()
             context.succeed(policy.build());
+
         }).catch(function(res) {
             console.log(res);
 
@@ -59,12 +59,9 @@ exports.handler = function(event, context) {
                 resource += apiGatewayArnTmp[3];
             }
 
-            // the example policy below denies access to all resources in the RestApi
             var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
             policy.denyAllMethods();
-            // policy.allowMethod(AuthPolicy.HttpVerb.GET, "/users/username");
 
-            // finally, build the policy and exit the function using context.succeed()
             context.succeed(policy.build());
 
         });
@@ -72,8 +69,47 @@ exports.handler = function(event, context) {
         console.log('Validating JWT (', jwt, ') using jsonwebtoken library.');
         jsonwebtoken.verify(jwt, config.secret).then(function(res) {
             console.log(res);
+
+            var principalId = res[BYU_CLAIMS_PREFIX + 'client_net_id'] || res['sub'] || 'unkown';
+
+            var apiOptions = {};
+            var tmp = event.methodArn.split(':');
+            var apiGatewayArnTmp = tmp[5].split('/');
+            var awsAccountId = tmp[4];
+            apiOptions.region = tmp[3];
+            apiOptions.restApiId = apiGatewayArnTmp[0];
+            apiOptions.stage = apiGatewayArnTmp[1];
+            var method = apiGatewayArnTmp[2];
+            var resource = '/'; // root resource
+
+            if (apiGatewayArnTmp[3]) {
+                resource += apiGatewayArnTmp[3];
+            }
+
+            var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
+            policy.allowAllMethods();
+
+            context.succeed(policy.build());
         }).catch(function(res) {
             console.log(res);
+
+            var apiOptions = {};
+            var tmp = event.methodArn.split(':');
+            var apiGatewayArnTmp = tmp[5].split('/');
+            var awsAccountId = tmp[4];
+            apiOptions.region = tmp[3];
+            apiOptions.restApiId = apiGatewayArnTmp[0];
+            apiOptions.stage = apiGatewayArnTmp[1];
+            var method = apiGatewayArnTmp[2];
+            var resource = '/'; // root resource
+            if (apiGatewayArnTmp[3]) {
+                resource += apiGatewayArnTmp[3];
+            }
+
+            var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
+            policy.denyAllMethods();
+
+            context.succeed(policy.build());
         });
     }
 };
