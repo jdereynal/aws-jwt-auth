@@ -1,11 +1,1 @@
-# secret: byuwso2 # Replace with your key or secret for JWT verfication.
-secret: |
-  -----BEGIN PUBLIC KEY-----
-  MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzUy8BsruXBWunO8JxXBc
-  oyd2NXjsw+e5SnbIxijNHeTaHOGyckHh7QwXczDZonOfDdA1mhFjeH6JD7rMYymZ
-  qlNicx0zI5tEp0WPo2AiyPvY6XyxGAj3rPM0c94UtvaZs3m3kPKNWgIdkmtBVnR5
-  8OH75/RGvBoPTin6PJrIfrIOe/mctpwPmwmpqH23yVQZXffiL9LTLPgzLtS31j0O
-  h2Cia7AuZtjynGdtaV2x/ghnh8kJp6OgPVOF+NXVE2Ko+SHS3g/zpxDG94ig3Odv
-  la00SX4rt+vZEHlvnNBXZQ4kXTFC2lQ7waf/U6LfolgOJAYKUuCrvF5T9VTr/ZCr
-  +wIDAQAB
-  -----END PUBLIC KEY-----
+secret: byuwso2 # Replace with your key or secret for JWT verfication.
