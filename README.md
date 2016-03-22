@@ -14,6 +14,8 @@ An AWS Lambda function intended to be used as an AWS API Gateway custom authoriz
 
 **Note**: We will be using the AWS CLI to create our lambda function, but you could also do so through the AWS console.
 
+**Note**: If you are at BYU and are validating JWTs from BYU's WSO2, you just need to do steps 1-2, and 6. You do not need to modify the deployment package with the BYU WSO2 key as that is the default.
+
 1. Checkout a local copy of this repository.
 2. From the repository root, checkout the release branch: `git checkout release`.
 3. Unzip the deployment package: `unzip awsjwtauthorizer.zip`.
