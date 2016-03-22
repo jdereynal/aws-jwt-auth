@@ -67,10 +67,8 @@ exports.handler = function(event, context) {
         });
     } else {
         console.log('Validating JWT (', jwt, ') using jsonwebtoken library.');
-        jsonwebtoken.verify(jwt, config.secret).then(function(res) {
-            console.log(res);
-
-            var principalId = res[BYU_CLAIMS_PREFIX + 'client_net_id'] || res['sub'] || 'unkown';
+        jsonwebtoken.verify(jwt, config.secret, function(err, decoded) {
+            var principalId = decoded[BYU_CLAIMS_PREFIX + 'client_net_id'] || decoded['sub'] || 'unknown';
 
             var apiOptions = {};
             var tmp = event.methodArn.split(':');
@@ -87,28 +85,16 @@ exports.handler = function(event, context) {
             }
 
             var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
+
+            if (err) {
+                console.log('Error:', err);
+                policy.denyAllMethods();
+                context.succeed(policy.build());
+                return;
+
+            }
+
             policy.allowAllMethods();
-
-            context.succeed(policy.build());
-        }).catch(function(res) {
-            console.log(res);
-
-            var apiOptions = {};
-            var tmp = event.methodArn.split(':');
-            var apiGatewayArnTmp = tmp[5].split('/');
-            var awsAccountId = tmp[4];
-            apiOptions.region = tmp[3];
-            apiOptions.restApiId = apiGatewayArnTmp[0];
-            apiOptions.stage = apiGatewayArnTmp[1];
-            var method = apiGatewayArnTmp[2];
-            var resource = '/'; // root resource
-            if (apiGatewayArnTmp[3]) {
-                resource += apiGatewayArnTmp[3];
-            }
-
-            var policy = new AuthPolicy(principalId, awsAccountId, apiOptions);
-            policy.denyAllMethods();
-
             context.succeed(policy.build());
         });
     }
