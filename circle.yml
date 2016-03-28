@@ -14,7 +14,7 @@ checkout:
     - ./pipeline.sh start || ./pipeline.sh fail
 
 dependencies:
-  pre:
+  override:
     - pip install awscli
     - ./pipeline.sh deploy || ./pipeline.sh fail
 
