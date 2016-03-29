@@ -45,6 +45,8 @@ exports.handler = function(event, context) {
         }).catch(function(res) {
             console.log(res);
 
+            var principalId = 'unknown';
+
             // build apiOptions for the AuthPolicy
             var apiOptions = {};
             var tmp = event.methodArn.split(':');
