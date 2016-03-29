@@ -13,7 +13,14 @@ exports.handler = function(event, context) {
     console.log('Client token: ' + event.authorizationToken);
     console.log('Method ARN: ' + event.methodArn);
 
-    var jwt = event.authorizationToken.split(" ")[1];
+    var jwt = '';
+
+    if (event.authorizationToken.indexOf('Bearer') > -1) {
+        jwt = event.authorizationToken.split(" ")[1];
+    } else {
+        jwt = event.authorizationToken;
+    }
+    
     var config = yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'authorizer.yml'), 'utf8'));
 
     // Validate the JWT using the byu-jwt library.
