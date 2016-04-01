@@ -14,7 +14,7 @@ exports.handler = function(event, context) {
     console.log('Method ARN: ' + event.methodArn);
 
     var jwt = '';
-
+    
     if (event.authorizationToken.indexOf('Bearer') > -1) {
         jwt = event.authorizationToken.split(" ")[1];
     } else {
@@ -23,7 +23,6 @@ exports.handler = function(event, context) {
     
     var config = yaml.safeLoad(fs.readFileSync(path.join(process.cwd(), 'authorizer.yml'), 'utf8'));
 
-    // Validate the JWT using the byu-jwt library.
     if (config.secret === 'byuwso2') {
         console.log('Validating JWT (', jwt, ') using byu-jwt library.');
         byuJWT.verifyJWT(jwt, BYU_WSO2_WELL_KNOWN_URL).then(function(res) {
