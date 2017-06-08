@@ -15,7 +15,7 @@ ddd:
   context_map_url: 
 links:
   system_documentation_url: 
-  source_repo_url: https://github.com/byu-oit-appdev/aws-jwt-auth
+  source_repo_url: https://github.com/byu-oit/aws-jwt-auth
   swagger_urls:
 microservice: false
 technologies_used:
@@ -50,5 +50,5 @@ tags:
   env: prd
   team: AD-Student Life Applications
   app: aws-jwt-auth
-federation_json_url: https://raw.githubusercontent.com/byu-oit-appdev/aws-jwt-auth/master/.repo-meta.yml
+federation_json_url: https://raw.githubusercontent.com/byu-oit/aws-jwt-auth/master/.repo-meta.yml
 
